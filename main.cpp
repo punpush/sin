@@ -1,7 +1,8 @@
-//#include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QApplication>
+#include <QtWidgets/QApplication>
+#include <QQmlContext>
 
+#include "work.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,7 +18,11 @@ int main(int argc, char *argv[])
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
+
+
+    engine.rootContext()->setContextProperty("DataFromWork",new work());
     engine.load(url);
+
 
     return app.exec();
 }
