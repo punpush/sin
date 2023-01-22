@@ -2,13 +2,23 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.0
 import QtCharts 2.3
-
+import QtQuick.Layouts 1.12
 
 Window {
-    width: 1280
-    height: 1024
+    width: 800
+    height: 600
     visible: true
     title: qsTr("sinus")
+
+
+    GridLayout {
+        id: grid
+
+        anchors.fill: parent
+        anchors.margins: 10
+        rows: 10
+        columns: 3
+
 
 
     Connections {
@@ -23,14 +33,17 @@ Window {
 
     ChartView {
         id: sinus
-        anchors.margins: 100
-        anchors.horizontalCenter : parent.horizontalCenter
-        anchors.top: parent.top
+
         antialiasing: true
 
-        width: 1000
+        Layout.column: 0
+        Layout.row: 1
+        Layout.rowSpan: 6
+        Layout.columnSpan: 3
 
-        height: 800
+
+        Layout.fillHeight: true
+        Layout.fillWidth: true
 
         ValueAxis {
             id: axisY
@@ -50,13 +63,16 @@ Window {
 
     }
 
+
+
+
     Button {
         id:start
 
-
-        anchors.margins: 30
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
+        Layout.column: 0
+        Layout.row: 10
+        Layout.minimumHeight: 40
+        Layout.minimumWidth: 100
 
         text: qsTr("Start")
 
@@ -64,12 +80,19 @@ Window {
 
     }
 
+
+
+
+
     Button {
         id:stop
 
-        anchors.margins: 30
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
+        Layout.column: 2
+        Layout.row: 10
+        Layout.minimumHeight: 40
+        Layout.minimumWidth: 100
+        Layout.columnSpan: 1
+        Layout.alignment: Qt.AlignRight
 
         text: qsTr("Stop")
 
@@ -78,12 +101,15 @@ Window {
 
     }
 
+
     Slider {
         id:slider
 
-        anchors.margins: 30
-        anchors.horizontalCenter : parent.horizontalCenter
-        anchors.bottom: parent.bottom
+        Layout.column: 1
+        Layout.row: 10
+        Layout.minimumHeight: 40
+        Layout.minimumWidth: 200
+        Layout.alignment: Qt.AlignHCenter
 
         from: 1
         stepSize: 10
@@ -92,31 +118,34 @@ Window {
 
         onMoved: speedchng(value)
 
-
-
+        function speedchng(value){
+            DataFromWork.speed(value)
+            DataFromWork.start()
+        }
     }
+
+
+
+
+
 
     Text {
         id:speed
 
+        Layout.column: 1
+        Layout.row: 9
+        Layout.minimumHeight: 10
+        Layout.minimumWidth: 10
+        Layout.alignment: Qt.AlignHCenter
         text: "speed"
 
-
-        anchors.margins: 60
-        anchors.horizontalCenter : parent.horizontalCenter
-        anchors.bottom: parent.bottom
-
     }
-
-    function speedchng(value){
-        DataFromWork.speed(value)
-        DataFromWork.start()
-    }
-
-
-
 
 }
+
+}
+
+
 
 
 
