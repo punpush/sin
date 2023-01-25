@@ -4,7 +4,7 @@
 
 work::work(QObject  *parent)
     : QObject(parent),
-      m_speed(1),
+      m_speed(100),
       max_range(50)
 {
     Timer = new QTimer(this);
