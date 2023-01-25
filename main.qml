@@ -3,6 +3,7 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.0
 import QtCharts 2.3
 import QtQuick.Layouts 1.12
+import DataFromWork 1.0
 
 Window {
     width: 800
@@ -11,36 +12,33 @@ Window {
     title: qsTr("sinus")
 
 
-    GridLayout {
-        id: grid
+    Connections {
+        target: data
+        onPointChanged: {
+            line1.append(data.point.x, data.point.y)
+        }
+        onMaxrangeChanged: {
+            axisX1.max = data.maxrange()
+        }
+    }
+
+    DataFromWork {
+        id: data
+    }
+
+
+
+    ColumnLayout {
+        id: column
 
         anchors.fill: parent
         anchors.margins: 10
-        rows: 10
-        columns: 3
 
-
-
-    Connections {
-        target: DataFromWork
-        onPointChanged: {
-            line1.append(DataFromWork.point.x, DataFromWork.point.y)
-        }
-        onMaxrangeChanged: {
-            axisX1.max = DataFromWork.maxrange()
-        }
-    }
 
     ChartView {
         id: sinus
 
         antialiasing: true
-
-        Layout.column: 0
-        Layout.row: 1
-        Layout.rowSpan: 6
-        Layout.columnSpan: 3
-
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -65,87 +63,76 @@ Window {
 
 
 
+    RowLayout {
 
-    Button {
-        id:start
+        anchors.margins: 5
+        spacing:50
 
-        Layout.column: 0
-        Layout.row: 10
-        Layout.minimumHeight: 40
-        Layout.minimumWidth: 100
+
+        Button {
+            id:start
+
+        Layout.fillWidth: true
+        Layout.alignment: Qt.AlignHCenter
 
         text: qsTr("Start")
 
-        onClicked: DataFromWork.start()
+        onClicked: data.start()
 
     }
 
-
-
-
-
-    Button {
-        id:stop
-
-        Layout.column: 2
-        Layout.row: 10
-        Layout.minimumHeight: 40
-        Layout.minimumWidth: 100
-        Layout.columnSpan: 1
-        Layout.alignment: Qt.AlignRight
-
-        text: qsTr("Stop")
-
-        onClicked: DataFromWork.stop()
-
-
-    }
 
 
     Slider {
         id:slider
 
-        Layout.column: 1
-        Layout.row: 10
-        Layout.minimumHeight: 40
-        Layout.minimumWidth: 200
+        Layout.fillWidth: true
         Layout.alignment: Qt.AlignHCenter
 
         from: 1
-        stepSize: 10
+        stepSize: 1
         to:100
 
 
         onMoved: speedchng(value)
 
         function speedchng(value){
-            DataFromWork.speed(value)
-            DataFromWork.start()
+            data.speed(slider.to - value)
+            data.start()
+        }
+
+        Text {
+
+            id:speed
+
+
+            anchors.bottom: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+
+
+
+            text: "speed"
+
         }
     }
 
+    Button {
+        id:stop
 
-
-
-
-
-    Text {
-        id:speed
-
-        Layout.column: 1
-        Layout.row: 9
-        Layout.minimumHeight: 10
-        Layout.minimumWidth: 10
+        Layout.fillWidth: true
         Layout.alignment: Qt.AlignHCenter
-        text: "speed"
+
+        text: qsTr("Stop")
+
+        onClicked: data.stop()
+
+
+    }
 
     }
 
 }
 
 }
-
-
-
 
 
