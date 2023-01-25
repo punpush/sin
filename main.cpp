@@ -11,6 +11,8 @@ int main(int argc, char *argv[])
 #endif
     QApplication app(argc, argv);
 
+    qmlRegisterType<work>("DataFromWork",1,0,"DataFromWork");
+
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
@@ -19,8 +21,6 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
 
-
-    engine.rootContext()->setContextProperty("DataFromWork",new work());
     engine.load(url);
 
 
